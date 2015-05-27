@@ -1,0 +1,29 @@
+{% load staticfiles i18n %}
+
+{% comment %}
+    Ajax discussion list - this template is an anhor for the backbone
+    application.
+{% endcomment %}
+
+<div id="discussions" class="discussion-list custom-tablelike"></div>
+
+<script type="text/template" id="topic-entry">
+    <div class="row">
+        <div class="col-sm-5 excerpt">
+            <a href="<%= url %>"><%= title %></a>
+        </div>
+        <div class="col-sm-2 category">
+            {% comment %}<a href="<%= category.url %>">{% endcomment %}<label class="label label-default"><%= category.name %></label>{% comment %}</a>{% endcomment %}
+        </div>
+        <div class="col-sm-5 custom-align-r">
+            <span class="count"><%= meta.answers %></span>
+            <img src="<%= creator.img %>" alt="<%= creator.name %>" class="user-avatar-minithumb" />
+            <a href="<%= creator.url %>"><span class="user-window-toggle" data-target="<%= creator.id %>"><%= creator.name %></span></a>
+            <span class="date-created"><%= date_created %></span>
+        </div>
+    </div>
+</script>
+
+{% include 'places_core/paginator.html' %}
+
+{% include 'locations/category-form.html' %}

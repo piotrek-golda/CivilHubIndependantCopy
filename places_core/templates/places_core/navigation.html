@@ -1,0 +1,146 @@
+{% load staticfiles i18n postman_tags civil_tags notify_tags %}{% postman_unread as unread_count %}{% unread_notifications as ncount %}
+<nav id="navbar-top" class="navbar-default navbar-fixed-top navbar-top-border" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse">
+        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand" href="/activity/"><img src="{% static 'places_core/img/logo.png' %}" alt="Logo CivilHub"><span class="logo_beta">Beta</span></a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+      <div class="navbar-top-search hidden" id="search-one">
+        <form class="navbar-form navbar-right custom-main-search" role="search" method="get" action="{% url 'search:haystack_search' %}">
+          <input type="text" name="q" id="id_q" class="form-control" placeholder="{% trans "Search" %}">
+          <button type="submit" class="search-button"><span class="fa fa-search"></span></button>
+        </form>
+      </div>
+      <ul class="nav navbar-nav navbar-left navbarHeaderLeft">
+        <li class="nav-search hidden-xs">
+          <a href="#" id="search-bar-icon" class="custom-tooltip-right" title="{% trans "Search" %}"><span class="search-icon-top"></span></a>
+          <div class="search-bar-box hidden">
+            <form class="search-form" role="search" method="get" action="{% url 'search:haystack_search' %}">
+              <input type="text" name="q" id="id_q" class="form-control-search" placeholder="{% trans "Search" %}" autofocus>
+              <button type="submit" class="search-button hidden"><span class="fa fa-search"></span></button>
+            </form>
+          </div>
+        </li>
+        {% if user.is_authenticated %}<li class="dropdown">
+          <a class="dropdown-toggle custom-tooltip-right onlyIcon" data-toggle="dropdown" href="#" title="{% trans "Support" %}">
+            <span class="support-icon"></span><span class="rwdShow">{% trans "Support" %} <span class="fa fa-angle-down"></span></span>
+          </a>
+          <ul class="dropdown-menu support-icon-box">
+            <li><a href="/brief/">{% trans "Brief" %}</a></li>
+            <li><a href="/local-communities/">{% trans "Local Communities" %}</a></li>
+            <li><a href="/project-features/">{% trans "About Projects" %}</a></li>
+            <li><a href="/idea-to-law/">{% trans "Law changes" %}</a></li>
+            <li><a href="/idea-to-project/">{% trans "Idea to Projects" %}</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu"><a href="#" data-toggle="dropdown">{% trans "For Cities" %}</a>
+              <ul class="dropdown-menu">
+                <li><a href="/for-city-administration/">{% trans "For City Administration" %}</a></li>
+              </ul>
+            </li>
+            <li class="dropdown-submenu"><a href="#" data-toggle="dropdown">{% trans "For Organizations" %}</a>
+              <ul class="dropdown-menu">
+                <li><a href="/for-organizations/">{% trans "For your Organization" %}</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle onlyIcon custom-tooltip-right" href="#" title="{% trans "About CivilHub" %}" data-toggle="dropdown">
+            <span class="civilhub-icon-top"></span><span class="rwdShow">{% trans "About CivilHub" %} <span class="fa fa-angle-down"></span></span>
+          </a>
+          <ul class="dropdown-menu civilhub-icon-top-box">
+            <li><a href="/mission">{% trans "Mission" %}</a></li>
+            <li><a href="/team">{% trans "Team" %}</a></li>
+            <li><a href="/creed">{% trans "Creed" %}</a></li>
+            <li><a href="/history-timeline">{% trans "History" %}</a></li>
+            <li><a href="/licence">{% trans "Licence" %}</a></li>
+            <li><a href="/blog">{% trans "Our Blog" %}</a></li>
+            <li><a href="/contact">{% trans "Contact" %}</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right navbarHeader">
+        {% if user.is_authenticated %}<li class="user-hidden-link">
+          <a href="{% url 'user:index' %}"><span class="fa fa-user"> </span> {% trans "Profile" %}</a>
+          <a href="{% url 'user:logout' %}"><span class="fa fa-power-off"> </span> {% trans "Logout" %}</a>
+        </li>
+        <li class="user-profile-link">
+          <a class="avatar" href="{{ user.profile.get_absolute_url }}">
+            <img src="{{ user.profile.thumbnail.url }}" alt="{{ user.get_full_name }}" class="navbar-avatar" title="{% trans "Logged in as" %} {{ user.get_full_name }}" />
+          </a>
+        </li>
+        <li class="dropdown">
+          <a  id="username" href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.first_name }} <span class="fa fa-angle-down"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ user.profile.get_absolute_url }}">{% trans "Profile" %}</a></li>
+            <li><a href="/invite-friends/">{% trans "Invite friends" %}</a></li>
+            <li><a href="{% url 'user:locations' user.profile.clean_username %}">{% trans "My Places" %}</a></li>
+            <li><a href="{% url 'gallery:index' %}">{% trans "Media" %}</a></li>
+            <li><a href="{% url 'user:organizations' user.profile.clean_username %}">{% trans "Organizations" %}</a></li>
+            <li><a href="{% url 'user:index' %}">{% trans "Edit profile" %}</a></li>
+            <li class="divider"></li>
+            <li><a href="{% url 'user:logout' %}">{% trans "Logout" %}</a></li>
+          </ul>
+        </li>{% else %}<li><a href="{% url 'user:register' %}" class="loginFeatures">{% trans "Sign up" %}</a></li>
+        <li><a href="{% url 'user:login' %}" class="loginFeatures ml30">{% trans "Login" %}</a></li>{% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right navbarHeader">
+        {% if user.is_authenticated %}{% if location or user.profile.followed_locations|length %}<li><a href="#" class="onlyIcon cd-bouncy-nav-trigger custom-tooltip-right" title="{% trans 'Create content' %}"><span class="bouncy-add-plus"></span><span class="rwdShow">{% trans "Create content" %}</span></a></li>
+        <div class="cd-bouncy-nav-modal">
+          <div class="cd-bouncy-select-location"><h2>{% trans "Actually creating in" %}:</h2>
+            <select{% if location %} data-location="{{ location.slug }}"{% endif %} class="form-control input-sm">
+            {% if location %}<option value="{{ location.slug }}">{{ location }}</option>{% endif %}
+          </select></div>
+          <nav>
+            <ul class="cd-bouncy-nav">
+              <li><a class="bouncy-option" data-content="news" href="#">{% trans "News" %}</a></li>
+              <li><a class="bouncy-option" data-content="ideas" href="#">{% trans "Idea" %}</a></li>
+              <li><a class="bouncy-option" data-content="discussion" href="#">{% trans "Discussion" %}</a></li>
+              <li><a class="bouncy-option" data-content="polls" href="#">{% trans "Poll" %}</a></li>
+              <li><a class="bouncy-option" data-content="projects" href="#">{% trans "Project" %}</a></li>
+              <li><a class="bouncy-option" data-content="gallery" href="#">{% trans "Gallery" %}</a></li>
+            </ul>
+          </nav>
+          <a href="#0" class="cd-close">Close modal</a>
+        </div>{% endif %}
+        <li class="dropdown">
+          <a class="dropdown-toggle onlyIcon custom-tooltip-right" title="{% trans "Places" %}" data-toggle="dropdown" href="#"><span class="places-icon"></span><span class="rwdShow">{% trans "Places" %} <span class="fa fa-angle-down"></span></span></a>
+          <ul class="dropdown-menu places-icon-box">
+            <li>
+              <a href="{% url 'locations:index' %}">{% trans "Browse Places" %}</a>
+            </li>
+            <li class="divider"></li>
+            {% for l in user.profile.followed_locations %}<li><a href="{{ l.get_absolute_url }}">{{ l.name }}</a></li>{% endfor %}
+            {% if user.is_authenticated %}<li class="divider"></li>
+            <li><a href="{% url 'locations:create' %}">{% trans "Create new place" %}</a></li>{% endif %}
+          </ul>
+        </li>
+        <li><a href="{% url 'maps:index' %}" class="onlyIcon custom-tooltip-right" title="{% trans "Map" %}" id="tour-map-icon"><span class="maps-boxBox fa fa-globe"><span class="rwdShow">{% trans "Map" %}</span></span> </a></li>{% endif %}
+        {% if user.is_authenticated %}<li><a href="{% url 'organizations:index' %}" class="onlyIcon custom-tooltip-right" title="{% trans "Organizations" %}"><span class="ngo-icon"></span> <span class="rwdShow">{% trans "Organizations" %}</span></a></li>
+        <li class="dropdown">
+          <a class="bookmarks-list-toggle dropdown-toggle onlyIcon custom-tooltip-right" data-toggle="dropdown" href="#" title="{% trans "Bookmarks" %}">
+            <span class="my-bookmarkBox fa fa-bookmark-o"><span class="rwdShow">{% trans "My Bookmarks" %} <span class="fa fa-angle-down"></span></span></span>
+          </a>
+          <ul class="dropdown-menu bookmarks-no-list">
+            <li class="divider"></li>
+            <li><a href="{% url 'bookmarks-list' %}">{% trans "Manage" %}</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="{% url 'postman_inbox' %}" class="onlyIcon custom-tooltip-right" title="{% trans "Messages" %}">
+            <span class="message-box fa fa-envelope-o"><span class="rwdShow">{% trans "Messages" %}</span></span>
+            {% if unread_count %}<span class="badge custom-badge-indicator">{{ unread_count }}</span>{% endif %}
+          </a>
+        </li>
+        <li><a id="notifications-toggler" class="onlyIcon lastIco custom-tooltip-right" title="{% trans "Notifications" %}" href="#"><span class="fa fa-bell-o"><span class="rwdShow">{% trans "Notifications" %}</span></span>{% if ncount %}<span class="badge custom-badge-indicator">{{ ncount }}</span>{% endif %}</a></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,149 @@
+/*
+ * create-form.less
+ *
+ * Style dla rozmaitych formularzy, wbrew pozorom nie tylko tworzących nowe
+ * elementy contentu.
+ */
+
+.create-form {
+    > h3{
+        margin-top: 0px;
+        margin-bottom: 15px;
+    }
+    &.newFormCreate{
+      >h3{
+        font-size: 16px;
+        line-height: 26px;
+        margin: -15px -15px 15px;
+        border-bottom: 1px solid #DDD;
+        padding: 5px 20px;
+        &.nh3{ font-size: 21px; padding: 20px; }
+      }
+    }
+    /*
+     * Ukrywamy elementy, które zastąpimy Google mapą.
+     */
+    #id_latitude,
+    #id_longitude,
+    label[for=id_latitude],
+    label[for=id_longitude] {
+        display: none;
+    }
+
+    /*
+     * TODO: to na pewno da się zdefiniować w samym Bootstrapie
+     */
+    .btn[type=submit] {
+        background: -webkit-linear-gradient(top,  #269fe4 0%,#1986d9 100%);
+        background: linear-gradient(to bottom,  #269fe4 0%,#1986d9 100%);
+        border: 1px solid #407DCD;
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.75);
+
+    }
+
+    /*
+     * Wyświetlanie błędów w alertach - bez tej reguły formularze będą się
+     * rozpadać.
+     */
+    .alert {
+        clear: both;
+    }
+
+    .custom-btn-full-width {
+        width: 100%;
+    }
+}
+
+.form-unstyled{
+  ul{
+    list-style: none;
+    padding: 0;
+  }
+  ul.errorlist{
+    .alert; .alert-danger;
+  }
+  p>label{
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+/*******************************
+ * TWORZENIE NOWEJ LOKALIZACJI *
+ *******************************/
+
+/*
+ * Element wyświetlający aktualnie wybraną miejscowość.
+ */
+.indicator {
+    margin-top: 15px;
+}
+
+/*
+ * Style dla listy sub-lokalizacji.
+ */
+.fake {
+  ul {
+    min-width: 300px;
+    list-style-type: none;
+    display: none;
+    position: absolute;
+    z-index: 1001;
+    background-color: #fff;
+    border: 1px solid #407DCD;
+    max-height: 360px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: auto;
+
+    li {
+        display: block;
+        width: 100%;
+
+        &.name-entry {
+            height: 30px;
+            line-height: 30px;
+            padding: 0px 15px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #407DCD;
+            }
+        }
+
+        &.filter-entry {
+            padding: 5px;
+        }
+    }
+  }
+}
+
+
+/*******************************
+ *    FORMULARZE DO OBRAZÓW    *
+ *******************************/
+
+#img-preview {
+    margin-bottom: 35px;
+}
+.avatarViewIMG{
+    width: 40px;
+    height: 40px;
+    img{
+        max-width: 100%;
+        .border-radius(50%);
+    }
+}
+//form bordeR:0
+.border0{
+    border: 0 none !important;
+}
+
+
+.picture-input-entry {
+  margin: 10px 0px;
+  padding: 0px none;
+  &:first-of-type {
+    margin: 0px none;
+  }
+}

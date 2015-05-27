@@ -1,0 +1,91 @@
+/*
+ * notifications.less
+ * ==================
+ *
+ * Styles for user's notification window.
+ */
+
+#notification-window {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 90%;
+  max-height: 494px;
+  background-color: #fff;
+  width: 400px;
+  margin-left: -355px;
+  -webkit-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow:    3px 3px 5px 0px rgba(50, 50, 50, 0.2);
+  box-shadow:         3px 3px 5px 0px rgba(50, 50, 50, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 5px 5px;
+  font-size: 14px; //fix features-page
+  &:before{
+    content: url('../img/msg_dzibuek.png');
+    display: block;
+    top: -15px;
+    right: 20px;
+    width:19px;
+    position: absolute;
+  }
+  ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 460px;
+  }
+  li {
+    min-height: 46px;
+    clear: both;
+    font-size: 11px;
+    border-bottom: 1px solid #E6E6E6;
+    padding: 7px 10px;
+    position: relative;
+    &:last-child{
+      border: 0 none;
+    }
+    &:hover{
+      background-color: #f6f6f6;
+      margin: 0 -5px;
+      a{ padding: 0 15px; }
+    }
+    &.new {
+      background-color: #519EE2;
+      margin: 0 -5px;
+      padding: 7px 10px;
+      span, p{
+        color: #FFF;
+      }
+    }
+    a{
+      text-decoration: none;
+      padding: 0 10px;
+    }
+    p{
+      margin: 0;
+      padding-top: 5px;
+    }
+  }
+  img {
+    width: 30px;
+    float: left;
+    margin: 8px 8px 0 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius:    50%;
+    border-radius:         50%;
+  }
+  .more {
+    display: none;
+    text-decoration: none;
+    padding: 3px 0;
+    border-top: 1px solid #CCC;
+    margin-bottom: -5px;
+  }
+  .notify-user{
+    font-size: 13px;
+    color: #0083fb;
+  }
+}

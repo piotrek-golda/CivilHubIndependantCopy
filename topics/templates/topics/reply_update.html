@@ -1,0 +1,13 @@
+{% extends 'places_core/base.html' %}
+{% load staticfiles i18n %}
+
+{% block content %}
+<form role="form" action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary submit-btn">{% trans "Save" %}</button>
+    </div>
+</form>
+{% include 'gallery/media-uploader.html' %}
+{% endblock %}

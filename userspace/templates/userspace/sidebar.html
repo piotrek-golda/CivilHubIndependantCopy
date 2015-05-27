@@ -1,0 +1,43 @@
+{% load staticfiles i18n %}
+{% comment %}
+    Sidebar view, appended to the templated in the user
+    profile view. This view is only visible for the logged-in user
+    in his/her own profile page.
+{% endcomment %}
+
+{% if user.is_authenticated and request.user == cuser %}   
+
+<div class="col-sm-4">
+    <div class="sidebar ">
+        <div class="ambasador-image"><h3>{% trans "Zostań ambasadorem" %}</h3></div>
+        
+        <div class="sidebar-label">{% trans "Actions" %}:</div>
+            
+        <ul class="custom-sidebar-nav"> 
+            <li><a href="{% url 'user:locations' user.pk %}"></span>{% trans "My Places" %}</a></li>
+            <li><a href="{% url 'gallery:index' %}">{% trans "Media" %}</a></li>
+            <li><a href="{% url 'user:index' %}">{% trans "Edit profile" %}</a></li>
+            <li><a href="/invite-friends/">{% trans "Invite friends" %}</a></li>
+        </ul>
+    </div>
+    
+    <div id="contacts"></div>
+    
+</div>
+
+{% else %}
+
+<div class="col-sm-4">
+    {% if cuser %}
+        <div class="sidebar ">
+            <div class="sidebar-label">{% trans "Actions" %}:</div>
+                
+            <ul class="custom-sidebar-nav">
+                {% comment %}<li><a href="{% url 'postman_write' cuser.username %}"><span class="ch-icon ch-envelope"></span>{% trans "Send message" %}</a></li>{% endcomment %}
+            </ul>
+        </div>
+    {% endif %}
+    
+</div>
+
+{% endif %}

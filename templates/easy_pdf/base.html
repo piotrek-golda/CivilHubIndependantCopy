@@ -1,0 +1,57 @@
+{% load i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% get_current_language as LANG %}
+<html lang="{{ LANG }}">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>{{ title|default:"" }}</title>
+  {% block style_base %}
+  {% block layout_style %}<style type="text/css">
+    @font-face {
+      font-family: "Lato";
+      src: url({{ font }});
+    }
+    @page {
+      size: 297mm 210mm; 
+      background-image: url( {{ img }} );
+      @frame location{
+        -pdf-frame-content: location;
+        top: 2cm;
+        height: 2cm;
+      }
+      @frame title{
+        -pdf-frame-content: title;
+        top: 3.5cm;
+        height: 2cm;
+      }
+      @frame page-left-side{
+        -pdf-frame-content: page-left-side;
+        top: 5.5cm;
+        height: 11.25cm;
+      }
+      @frame page-right-side{
+        -pdf-frame-content: page-right-side;
+        top: 5.5cm;
+        height: 11.25cm;
+      }
+      @frame page-info-link{
+        -pdf-frame-content: page-info-link;
+        height: 1cm;
+        bottom: 2.5cm;
+      }
+      @frame page-footer-www{
+        -pdf-frame-content: page-footer-www;
+        height: 0.85cm;
+        bottom: 0.5cm;
+        left: 0cm;
+        margin-right: 0.85cm;
+      }
+    }
+  </style>{%endblock%}
+  {% block extra_style %}{% endblock %}{% endblock %}
+</head>
+<body>
+  {% block page_header %}{% endblock %}
+  <div>{% block content %}{% endblock %}</div>
+</body>
+</html>

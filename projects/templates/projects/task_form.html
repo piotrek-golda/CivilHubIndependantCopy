@@ -1,0 +1,21 @@
+{% extends 'projects/index.html' %}{% load i18n %}
+{% block location_navbar %}<div class="socialproject-detail-nav">{% include 'projects/navbar.html' %}</div>{% endblock %}
+{% block content %}
+<div class="col-sm-3">
+  <div class="sidebar left">
+    <div class="sidebar-label">{% trans "Rules" %}</div>
+    <div class="sidebar-content"></div>
+  </div>
+</div>
+<div class="main-content col-sm-9">
+  <div class="create-form newFormCreate">
+    <h3>{% trans 'Create new task' %}</h3>
+    <form method="post" action="" class="form-horizontal">{% csrf_token %}
+      {{ form.as_p }}
+      <div class="form-group mb0 container-fluid text-right">
+        <button type="submit" class="btn btn-primary btn-saveBig">{% trans "Save" %}</button>
+    </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

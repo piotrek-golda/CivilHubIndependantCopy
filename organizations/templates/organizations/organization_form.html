@@ -1,0 +1,80 @@
+{% extends 'places_core/base.html' %}{% load i18n %}
+{% block content %}<div class="col-sm-3">
+  <div class="sidebar left">
+    <div class="sidebar-label">{% trans "Help" %}</div>
+    <div class="sidebar-content">
+      <strong>{% trans "Create new organization" %}</strong>
+      <ol>
+        <li>{% trans "Write down the name of your organization." %}</li>
+        <li>{% trans "Choose a category, i.e. clarify if you are adding a City Hall, Foundation or an Association" %}</li>
+        <li>{% trans "Add some information about your organization in the description box. Write what your organization does, what is its goal, you can write a short history or anything you think fits a description." %}</li>
+        <li>{% trans "Write the DUNS number (or its equivalent in your country." %}</li>
+        <li>{% trans "Fill in some additional information about your organization so it is easier to conact you (an email and a website address if you have one)." %}</li>
+        <li>{% trans "Finally, submit a Logo of your organization and adds tags so that people can find you." %}</li>
+        <li>{% trans "Click <b>Save</b> at the bottom of the page and your done." %}</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<div class="col-sm-9 main-content">
+  <div class="create-form newFormCreate">
+    <h3>{% trans "Create new organization" %}</h3>
+    <form method="post" action="" enctype="multipart/form-data" class="form-horizontal">{% csrf_token %}
+      {% if form.errors %}{% for field, errors in form.errors.items %}{% for error in errors %}<p class="alert alert-danger">{{ field }} - {{ error }}</p>{% endfor %}{% endfor %}{% endif %}
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_name">{% trans "Name" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.name }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_category">{% trans "Category" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.category }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_description">{% trans "Description" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.description }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_krs">{% trans "KRS" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.krs }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_email">{% trans "Email" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.email }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_website">{% trans "Website" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.website }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_logo">{% trans "Logo" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.logo }}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+          <label for="id_tags">{% trans "Tags" %}:</label>
+        </label>
+        <div class="col-sm-10">{{ form.tags }}</div>
+      </div>
+      <div class="form-group mb0">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10 text-right">
+          <button type="submit" class="btn btn-greenBig">{% trans "Save" %}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>{% endblock %}

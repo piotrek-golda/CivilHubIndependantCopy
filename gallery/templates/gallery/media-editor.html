@@ -1,0 +1,42 @@
+{% extends 'places_core/base.html' %}
+{% load staticfiles i18n %}
+
+{% block content %}
+
+<img src="{{ href }}" alt="{{ image }}" id="edited-image" />
+
+<form role="form" id="image-cropp-form" method="post" action="">
+    {% csrf_token %}
+    <input type="hidden" name="filename" value="{{ image }}" />
+    <input type="hidden" name="x" id="x" value="" />
+    <input type="hidden" name="y" id="y" value="" />
+    <input type="hidden" name="x2" id="x2" value="" />
+    <input type="hidden" name="y2" id="y2" value="" />
+    <div class="form-group">
+        <button type="button" class="btn btn-default cancel-btn">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-primary submit-btn">{% trans "Save" %}</button>
+    </div>
+</form>
+{% comment %}
+<script>
+(function ($) {
+    "use strict";
+
+    function showCoords (c) {
+        console.log(c);
+        $('#x').val(c.x);
+        $('#y').val(c.y);
+        $('#x2').val(c.x2);
+        $('#y2').val(c.y2);
+    }
+
+    $('#edited-image').Jcrop({
+        onSelect: showCoords,
+        onChange: showCoords,
+        aspectRatio: 1
+    });
+
+})(jQuery);
+</script>
+{% endcomment %}
+{% endblock %}

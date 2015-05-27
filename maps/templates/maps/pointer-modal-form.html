@@ -1,0 +1,28 @@
+{% load staticfiles i18n %}
+
+{% comment %}
+    Add point on map form template. The form is filled in automatically
+    based on the chosen content.
+{% endcomment %}
+
+<script type="text/template" id="map-marker-form-template">
+<div class="modal fade" id="pointer-form">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{% trans "Create map marker" %}</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="post" action="#">
+                    {{ marker_form }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                <button type="submit" class="btn btn-primary submit-btn">{% trans "Save" %}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+</script>

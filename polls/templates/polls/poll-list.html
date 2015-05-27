@@ -1,0 +1,32 @@
+{% load staticfiles i18n %}
+
+{% comment %}
+    Szablon dla listy ankiet - punkt wyjściowy dla aplikacji Backbone.
+{% endcomment %}
+
+<div id="polls"></div>
+
+<script type="text/template" id="poll-entry">
+    {% if user == poll.creator or is_moderator %}
+        <div class="btn-group list-entry-controls">
+            <a href="">
+                <button type="button" class="btn btn-default btn-sm" title="{% trans "Edit" %}"><span class="fa fa-edit"> </span></button>
+            </a>
+            <button data-target="<%= pk %>" type="button" class="btn btn-danger btn-sm delete-btn" title="{% trans "Delete" %}">
+                <span class="fa fa-times-circle-o"> </span></button>
+        </div>
+    {% endif %}
+    <div class="col-xs-6 custom-align-l"><a href="<%= url %>"><%= title %></a></div>
+    <div class="col-xs-6 custom-align-r">
+        <img src="<%= creator.img %>" alt="<%= creator.name %>" class="user-avatar-minithumb" />
+        <a href="<%= creator.url %>" class="user-window-toggle" data-target="<%= creator.id %>"><%= creator.name %></a>
+        <span class="date-created"><%= date_created %></span>
+        <div class="pollEye"><a href="<%= url %>"><span class="fa fa-eye"></span></a></div>
+    </div>
+
+</script>
+
+<input type="hidden" name="poll_api_url" id="poll-api-url" value="/api-locations/contents/?pk={{ location.pk }}&content=poll" />
+
+{% include 'places_core/paginator.html' %}
+{% include 'locations/no-results-tpl.html' %}

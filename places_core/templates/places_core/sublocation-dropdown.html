@@ -1,0 +1,26 @@
+{% comment %}
+
+    A template used by drop-down with sub-locations in the upper navigation
+    bar (in location view, e.g. location.location_list.all).
+
+{% endcomment %}
+
+{% load i18n %}
+<script type="text/template" id="ancestors-menu-tpl">
+    <div class="dropdown-title">
+        <h4>
+            <span class="text-title">{% trans "Sublocations" %}</span>
+              <button type="button" class="close" data-dismiss="dropdown-menu">
+                <span aria-hidden="true"><i class="fa fa-times"></i></span>         
+                <span class="sr-only">Close</span>
+            </button>
+            <a href="#"><span class="fa fa-search">&nbsp;</span></a>         
+        </h4>
+        <span class="search-title">
+            <form role="presentation" class="sublocation-search form-inline">
+                <input type="text" class="sublocation-search-input form-control input-sm" placeholder="{% trans "Search" %}..." />
+            </form>
+        </span>
+    </div>
+    <ul></ul>
+</script>

@@ -1,0 +1,26 @@
+{% load i18n civil_tags %}
+
+<script type="text/template" id="user-popup-tpl">
+
+<div class="userPopupTop">
+    <div class="user-popup-avatar">
+        <div class="userPopupBg" style="background:url({{ usr.profile.background_image.url }});">
+
+        </div>
+        <div class="avatarPopup">
+            <img src="<%= avatar %>" alt="<%= username %>" />
+        </div>
+
+    </div>
+    <div class="userPopupName"><a href="<%= user_link %>"><%= fullname %></a></div>
+</div>
+<div class="userPopupBottom">
+    <div class="user-popup-details">
+        <div class="userPopupDetails"><% for (var i = 0; i < follows.length; i++) { %>
+            <%= follows[i].name %>,&nbsp;
+        <% } %>
+        </div>
+    </div>
+</div>
+
+</script>

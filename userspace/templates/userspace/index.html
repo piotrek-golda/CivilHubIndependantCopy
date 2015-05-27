@@ -1,0 +1,121 @@
+{% extends 'places_core/base.html' %}
+{% load staticfiles i18n civil_tags actstream_tags %}
+{% block title %}{{ user.get_full_name }} - Civilhub.org {% endblock %}
+{% block description %}<meta name="description" content="{{ user.get_full_name }} {% if profile.followed_locations %}{% trans "engages in" %} {% for location in profile.followed_locations %}{{ location }}, {% endfor %}{% else %}{% endif %}" />{% endblock %}
+{% block meta %}<meta property="og:image" content="https://civilhub.org{{ profile.avatar.url }}"/>
+<meta property="og:site_name" content="CivilHub"/>
+<meta name="keywords" content=" {{ cuser.first_name }}, {{ cuser.last_name }}, {{ cuser.get_full_name }}">{% endblock %}
+{% block require_scripts %}
+<script src="{% static 'places_core' %}/js/{% js_path %}/userspace-form.js"></script>
+{% endblock %}
+
+{% block header %}
+<style type="text/css">
+.user-logo {
+  background-image: url({{ profile.background_url }});
+}
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .user-logo {
+    background-image: url({{ profile.retina_background_url }});
+  }
+}
+</style>
+    <div class="user-logo">
+    <div class="container">
+      <div class="user-info">
+        <div class="profile-page-avatar">
+          <img src="{{ profile.avatar.url }}" alt="{{ profile }}" />
+        </div>
+        <div class="user-fullname">
+          {{ profile }}
+        </div>
+        {% follow_button profile.user %}
+        {% if profile.gplus_url %}<a href="{{ profile.gplus_url }}" target="_blank"  rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Google+ profile" %}"><span class="fa fa-google">&nbsp;</span></a>{% endif %}
+        {% if profile.fb_url %}<a href="{{ profile.fb_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Facebook profile" %}"><span class="fa fa-facebook">&nbsp;</span></a>{% endif %}
+        {% if profile.twt_url %}<a href="{{ profile.twt_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Twitter profile" %}"><span class="fa fa-twitter">&nbsp;</span></a>{% endif %}
+        {% if profile.linkedin_url %}<a href="{{ profile.linkedin_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "LinkedIn profile" %}"><span class="fa fa-linkedin">&nbsp;</span></a>{% endif %}
+        {% if profile.website %}<a href="{{ profile.website }}" target="_blank"  rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Website" %}"><span class="fa fa-external-link">&nbsp;</span></a>{% endif %}
+        {% if request.user != user %}<a href="{% url 'postman_write' user.username %}" target="_blank" class="social-link-button custom-tooltip" title="Send private message"><span class="fa fa-envelope">&nbsp;</span></a>{% endif %}
+      </div>
+      {% if request.user == user %}
+        <div class="group-change-bg-btn"><a class="change-background-btn" href="{% url 'user:background' %}">{% trans "Change background image" %}</a></div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="profileIndexEmptyBox mt0"></div>
+{% endblock %}
+
+{% block content %}
+{% for error in errors %}
+  {{ error }}
+{% endfor %}
+{% if user.is_authenticated %}
+<div class="row">
+  <div class="col-sm-3">
+    <div class=" sidebar inboxSidebar">
+      <div class="sidebar-content">
+        {% comment %}<img src="{{ profile.avatar.url }}" alt="Avatar" class="user-thumb" />{% endcomment %}
+        <ul id="postman_menu" class="profileSidebarLeft">
+          <li><a href="#" class="simple-tabs-link" data-target="tab-1">{% trans "Profile summary" %}</a></li>
+          <li><a href="#" class="simple-tabs-link" data-target="tab-2">{% trans "Change password" %}</a></li>
+          <li><a href="#" class="simple-tabs-link" data-target="tab-3">{% trans "Change avatar" %}</a></li>
+        </ul>
+        <p class="profileRankPKT">{% trans "Points" %}: {{ profile.rank_pts }}</p>
+        <ul>
+        {% for badge in profile.badges.all %}
+          <li><img src="{{ badge.thumbnail.url }}" alt="{{ badge.name }}" class="user-badge-thumb" title="{{ badge.name}} - {{ badge.description | escape }}" /></li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    <div class="main-content">
+      <div class="simple-tabs" id="user-profile-tabs">
+        <div class="simple-tabs-tab active" id="tab-1">
+          <form id="user-profile-form" class="form-horizontal" method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-group">
+              <div class="col-sm-2">&nbsp;</div>
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-saveBig">{% trans "Save changes" %}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="simple-tabs-tab" id="tab-2">
+          <form id="user-password-form" class="form-horizontal" method="post" action="{% url 'user:chpass' %}">{% csrf_token %}
+            {{ passform.as_p }}
+            <div class="form-group">
+              <div class="col-sm-2">&nbsp;</div>
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-saveBig">{% trans "Save changes" %}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="simple-tabs-tab" id="tab-3">
+          <div class="addImageWidth">
+            <h4>* {% trans "The image should have a minimal width and height of 260px by 260px" %}</h4>
+          </div>
+          <form id="upload-avatar-form" class="form-horizontal" role="form" enctype="multipart/form-data" method="post" action="{% url 'user:upload_avatar' %}">{% csrf_token %}
+            {{ avatar_form.as_p }}
+            <div class="form-group">
+              <label class="control-label col-sm-2">&nbsp;</label>
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-saveBig submit-btn">{% trans "Save" %}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+  <p class="custom-booklike">{% trans "You are not allowed to visit this page. Sorry." %}</p>
+{% endif %}
+{% endblock %}

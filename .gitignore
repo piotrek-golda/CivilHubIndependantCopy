@@ -1,0 +1,27 @@
+node_modules/
+nbproject/
+Places/
+/media/
+log/
+data/
+/logs/
+settings/*
+# Collected staticfiles (master)
+/static/
+# Additional packages installed via PIP
+/src/
+celerybeat-schedule
+Thumbs.db
+dummydata.py
+db.sqlite*
+*.geany
+*.project
+*.pydevproject
+*.pyc
+*.pid
+*.bak
+*.swp
+*.DS_Store
+*.rdb
+# Used during build process
+tmp.js

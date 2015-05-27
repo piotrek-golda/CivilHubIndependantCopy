@@ -1,0 +1,35 @@
+{% extends 'locations/index.html' %}{% load staticfiles i18n actstream_tags %}
+{% block navigation_location %}<div class="location-page-subspaces">{% include 'locations/location-navbar.html' %}</div>{% endblock %}
+{% block content %}<div class="container sublocations">
+  <h1>{% trans "Sublocations" %}</h1>
+  <h2>{% blocktrans %}List of all sublocations that are inside current location.{% endblocktrans %}<br/>
+      {% blocktrans %}Act not only globally, but also on local community like small city, blocks of flats or estates.{% endblocktrans %}</h2>
+  <div class="row">
+  {% for sublocation in sublocations %}
+    <div class="col-sm-4 col-md-3">
+      <div class="sublocation">
+        <img src="{{ sublocation.thumb_url }}" />
+        <div class="sublocation-content">
+          <a href="{{ sublocation.get_absolute_url }}"><b>{{ sublocation.name }}</b></a>
+        </div>
+      {% follow_button sublocation %}
+      <div class="followers sprite-icon"><span class="ch-icon ch-followers"></span> {{ sublocation.users.count }}</div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{% if sublocations|length > 5 %}<ul class="pagination">
+    {% if sublocations.has_previous %}
+      <li><a href="?page=1">&laquo;</a></li>
+      <li><a href="?page={{ sublocations.previous_page_number }}">{% trans "previous" %}</a></li>
+    {% endif %}
+    {% for page in sublocations.paginator.page_range %}
+      <li{% if page == sublocations.number %} class="active"{% endif %}><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+    {% if sublocations.has_next %}
+      <li><a href="?page={{ sublocations.next_page_number }}">{% trans "next" %}</a></li>
+      <li><a href="?page={{ sublocations.paginator.num_pages }}">&raquo;</a></li>
+    {% endif %}
+</ul>{% endif %}
+</div>{% endblock %}

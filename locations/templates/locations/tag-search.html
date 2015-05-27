@@ -1,0 +1,40 @@
+{% extends 'locations/index.html' %}{% load staticfiles i18n civil_tags %}
+
+{% block content %}<div class="col-sm-9 main-content contentPX tags-Box-Search">
+    <div class="row">{% for item in items %}
+        {% with item|content_type as ctype %}<div class="col-sm-4 locBoxH">
+          <div class="locBox loc-box-{{ ctype.name }}">
+            <div class="locBoxHeader" style="background-image:url({{ item.image.url }})">
+              <div class="locBoxLoc"><a href="{{ location.get_absolute_url }}">{{ location }}</a></div>
+              <div class="locBoxContainer">
+                <div class="locBoxAuthor">
+                  <a href="{{ item.creator.profile.get_absolute_url }}">
+                    <img src="{{ item.creator.profile.avatar.url }}" alt="{{ item.creator }}" class="user-avatar avatarH ">
+                  </a>
+                </div>
+                <div class="locBoxTitle">
+                  <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+                </div>
+              </div>
+            </div>
+          <div class="locBoxCat"><a href="{{ item.get_absolute_url }}">{{ ctype }}</a></div>
+          <div class="locBoxBody"><a href="{{ item.get_absolute_url }}">
+            {% if item.description %}{{ item.description|striptags|truncatechars:115 }}{% elif item.question %}{{ item.question|striptags|truncatechars:115 }}{% else %}{{ item.content|striptags|truncatechars:115 }}{% endif %}</a>
+          </div>
+        </div><!-- /.locBox -->
+      </div>{% endwith %} {% endfor %}
+    </div>
+</div>{% endblock %}
+
+{% block sidebar %}<div class="col-sm-3 boxPX">
+  <div class="sidebar">
+    <div class="sidebar-label">{% trans "Tags" %}:</div>
+    <div class="sidebar-content tags-n">
+      <ul>
+      {% for tag, counter in tags %}
+        <li class="tag-entry tag-n" data-counter="{{ counter }}"><a href="{% url 'locations:tag_search' slug=location.slug tag=tag|slugify %}">#{{ tag }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>{% endblock %}

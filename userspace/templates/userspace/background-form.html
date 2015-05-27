@@ -1,0 +1,24 @@
+{% extends 'places_core/base.html' %}
+{% load staticfiles i18n civil_tags %}
+
+{% block require_scripts %}
+
+  <script src="{% static 'places_core/js' %}/{% js_path %}/userspace-background.js"></script>
+
+{% endblock %}
+
+
+{% block content %}
+
+  <form id="user-background-form" method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-group">
+      <label class="control-label col-sm-2">&nbsp;</label>
+      <div class="col-sm-10">
+        <button type="submit" class="btn btn-saveBig submit-btn">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}

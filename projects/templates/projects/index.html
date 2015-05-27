@@ -1,0 +1,76 @@
+{% extends 'places_core/base.html' %}{% load staticfiles i18n civil_tags %}
+{% block title %}{{ object.name }}, {{ location }} - Civilhub.org {% endblock %}
+{% block description %}<meta name="description" content="{{ object.description|striptags|slice:":153"}}..." />{% endblock %}
+{% block meta %}<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="CivilHub">
+<meta name="twitter:title" content="{{ object.name }}">
+<meta property="og:title" content="{{ object.name }}, {{ location.name }}"/>
+<meta property="og:site_name" content="CivilHub"/>
+<meta property="og:image" content="https://civilhub.org{{ object.image.url }}"/>
+<meta property="og:url " content="https://civilhub.org{{ object.get_absolute_url }}" />
+<meta property="og:description" content="{{ object.description|striptags|slice:":153" }}..."/>
+<meta property="article:author" content="https://civilhub.org{{ object.creator.profile.get_absolute_url }}" />
+<meta name="keywords" content="{{ object.name }}, {{ location.name }}">
+<meta property="article:published_time" content="{{ object.date_created|date:"c" }}">
+  {% if object.date_changed %}
+  <meta property="article:modified_time" content="{{ object.date_changed|date:"c" }}">
+  {% endif %}
+{% endblock %}
+{% block require_scripts %}<script src="{% static 'places_core' %}/js/{% js_path %}/projects-default.js"></script>{% endblock %}
+{% block header %}<style type="text/css">
+.location-logo {
+  background-image: url({{ object.background_url }});
+}
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .location-logo {
+    background-image: url({{ object.retina_background_url }});
+  }
+}
+</style>
+<nav id="location-chain-menu" class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" style="height: 1px;">
+      <ul class="nav navbar-nav">
+        <li class="first-indicator"><a href="/places/"><div class="maker-globe-point"></div></a></li>
+        {% for parent in location.get_parent_chain %}<li><a href="{{ parent.url }}">{{ parent.name }}</a></li>
+        <li class="breaker">
+          <a href="#" class="sublocation-menu-toggle" data-target="{{ parent.pk }}" data-toggle="dropdown">&gt;</a>
+        </li>{% endfor %}
+        <li><a href="{{ location.get_absolute_url }}">{{ location }}</a></li>
+        <li class="breaker"><a href="#">&gt;</a></li>
+        <li class="active"><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="location-logo" id="task-page-header-block">
+  <div class="container">
+    <div class="title-container">
+      <div class="project-name"><h1>{{ object }}</h1></div>
+      <div class="project-content"><p>{{ object.description|safe|striptags|slice:'300' }}</p></div>
+      <div class="join-project-btn">
+        {% if user.is_authenticated %}<form method="post" action="{% url 'locations:project_join' location.slug object.slug %}">{% csrf_token %}
+          {% if user in object.participants.all %}<div class="join-project-btn">
+            <button type="submit" class="submit-button invisible">{% trans "Leave the Project" %}</button>
+          </div>
+          {% else %}<div class="join-project-btn">
+            <button type="submit" class="submit-button">{% trans "Join the Project" %}</button>
+          </div>{% endif %}
+        </form>
+        {% else %}<a href="{% url 'user:login' %}?next={{ object.get_absolute_url }}" class="submit-button">{% trans "Log in" %}</a> {% trans "if you want to join this project" %}{% endif %}
+      </div>
+      <div class="projectparticipants-icons-top">
+        <p>{% trans "Project Participants" %}</p>
+        {% for p in object.participants.all %}<a href="{{ p.profile.get_absolute_url }}" class="custom-tooltip" title="{{ p.profile }}"><img src="{{ p.profile.avatar.url }}"></a>{% endfor %}
+      </div>
+    </div>
+    {% if project_access %}<div class="group-change-bg-btn"><a class="change-background-btn" href="{% url 'projects:background' object.slug %}">{% trans "Change background image" %}</a></div>{% endif %}
+  </div>
+</div>
+{% block location_navbar %}
+  {% include 'projects/navbar.html' %}
+{% endblock %}
+
+<input type="hidden" id="current-location-pk" value="{{ location.pk }}" />{% endblock %}

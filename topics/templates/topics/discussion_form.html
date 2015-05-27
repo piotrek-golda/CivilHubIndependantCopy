@@ -1,0 +1,29 @@
+{% extends 'locations/index.html' %}
+{% load staticfiles i18n civil_tags %}
+
+{% block require_scripts %}
+<script src="{% static 'places_core' %}/js/{% js_path %}/discussion-create.js"></script>
+{% endblock %}
+{% block navigation_location %}<div class="location-page-discussion">{% include 'locations/location-navbar.html' %}</div>{% endblock %}
+{% block content %}
+
+    <div class="col-sm-9 contentPX">
+        <div class="create-form">
+            <form class="form-horizontal" role="form" action="" method="post" id="discussion-create-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-group">
+                    <label class="control-label col-sm-2">&nbsp;</label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary submit-btn">{% trans "Save" %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-sm-3 boxPX">
+        {% include 'locations/sidebar.html' %}
+    </div>
+
+{% endblock %}

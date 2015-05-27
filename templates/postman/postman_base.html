@@ -1,0 +1,85 @@
+{% load staticfiles i18n civil_tags %}
+    
+{% include 'places_core/header.html' %}
+    
+{% comment %} ~~~~~~~~~~~~~~~~~~~~~ TAGS ~~~~~~~~~~~~~~~~~~~~~ {% endcomment %}
+{% block meta %}{% endblock %}
+
+{% comment %} ~~~~~~~~~~~~~~~~~~~ GEO TAGS ~~~~~~~~~~~~~~~~~~~ {% endcomment %}
+{% block geometa %}{% endblock %}
+
+{% comment %} ~~~~~~~~~~~~~ ADDITIONAL CSS FILES ~~~~~~~~~~~~~~ {% endcomment %}
+{% block extra_styles %}{% endblock %}
+
+{% include 'places_core/script-templates.html' %}
+
+{% comment %} ~~~~~~~~~~~~~~ REQUIRE.JS CONFIG ~~~~~~~~~~~~~~~ {% endcomment %}
+{% block require_scripts %}
+
+    {% comment %}
+        W tym bloku definiujemy inicjalizator dla Require.js, e.g. 'require.config'
+        i startową funkcję dla aplikacji. Zależności w Require powinny odzwierciedlać
+        faktycznie wszystkie wykorzystywane na stronie biblioteki i pluginy.
+    {% endcomment %}
+    
+    <script src="{% static 'places_core' %}/js/{% js_path %}/default.js"></script>
+    
+{% endblock %}
+
+{% comment %} ~~~~~~~~~~~~~~~ EXTRA JS FILES ~~~~~~~~~~~~~~~~ {% endcomment %}
+{% block extra_scripts %}{% endblock %}
+
+</head>
+<body>
+
+<div id="messages"></div>
+<div id="cookie-msg"></div>
+    
+{% include 'places_core/navigation.html' %}
+
+<div class="main-page-content wrap">
+    
+    
+    
+    {% block header %}
+    
+        <div class="inboxHeader">
+            <h1>
+
+                {% block pm_folder_title %}{% endblock %} 
+
+                {% block pm_write_title %}{% endblock %}       
+
+            </h1>
+        </div>
+    
+    {% endblock %}
+
+    <div id="messages"></div>
+
+    <div class="container">
+    
+        {% block topbar %}{% endblock %}
+        
+        
+        
+        {% block sidebar %}{% endblock %}
+        {% block content %}{% endblock %}
+
+    </div>
+    
+</div>
+
+
+{% include 'places_core/footer.html' %}
+
+{% include 'places_core/script-templates/flash-msg-tpl.html' %}
+{% include 'places_core/user-popup.html' %}
+{% include 'places_core/abuse-window-modal.html' %}
+{% include 'places_core/sublocation-dropdown.html' %}
+
+{% comment %} ~~~~~~~~~~~~~~~~ FOOTER SCRIPTS ~~~~~~~~~~~~~~~~ {% endcomment %}
+{% block footer_scripts %}{% endblock %}
+
+</body>
+</html>

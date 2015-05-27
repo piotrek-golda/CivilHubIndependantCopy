@@ -1,0 +1,30 @@
+{% load i18n staticfiles %}<script>
+(function () {
+  "use strict";
+  var app = app || {markers:[]};
+  {% for m in MARKERS %}app.markers.push({
+    lat: '{{ m.latitude }}',
+    lng: '{{ m.longitude }}',
+    pk: '{{ m.pk }}'
+  });{% endfor %}
+  app.staticUrl = "{% static 'places_core' %}";
+  {% if location %}app.currentLocationId = {{ location.pk }};{% endif %}
+  // Export to global because of legacy scripts
+  window.mapApp = app;
+})();
+</script>
+<div id="minimap-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span></button>
+        <h4 class="modal-title">{% trans "Minimap" %}</h4>
+      </div>
+      <div class="modal-body"><div id="minimap"></div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-cancelBig" data-dismiss="modal">{% trans "Close" %}</button>
+        <button type="submit" class="btn btn-primary btn-saveBig">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </div>
+</div>

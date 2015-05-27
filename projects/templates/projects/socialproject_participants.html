@@ -1,0 +1,25 @@
+{% extends 'projects/index.html' %}{% load i18n %}
+{% comment %}{{ object }}{% endcomment %}
+{% block location_navbar %}<div class="socialproject-participants-nav">{% include 'projects/navbar.html' %}</div>{% endblock %}
+{% block content %}
+<div class="followers-entry">
+  <h1>{% trans "People" %}</h1>
+  <h2>{% trans "People who follow this project" %}</h2>
+  {% for participant in object_list %}{% if forloop.counter0 == 0 or forloop.counter0|divisibleby:6 %}<div class="row">{% endif %}
+    <div class="col-md-2 col-sm-4 col-xs-6">
+      <div class="follower">
+        <div class="follower-header">
+        <a href="{{ participant.profile.get_absolute_url }}">
+          <div class="follower-background"><img alt="{{ participant.profile }}" src="{{ participant.profile.thumb_url }}"></div>
+          <div class="follower-photo"><img alt="{{ participant.profile }}" src="{{ participant.profile.avatar.url }}"></div>
+        </a>
+        </div>
+        <div class="follower-info">
+          <p class="follower-name"><a href="{{ participant.profile.get_absolute_url }}">{{ participant.profile }}</a></p>
+          <div class="points"><span class="points-count">{{ participant.profile.rank_pts }}</span> pkt</div>
+        </div>
+      </div>
+    </div>
+  {% if forloop.counter|divisibleby:6 or forloop.counter == object_list.count %}</div>{% endif %}{% endfor %}
+  {% include 'places_core/pagination.html' %}
+</div>{% endblock %}

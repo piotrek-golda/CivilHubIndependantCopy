@@ -1,0 +1,92 @@
+{% load staticfiles i18n %}{% get_current_language as LANG %}
+<div class="share-buttons">
+    <!-- Facebook -->
+    {% if LANG == 'pl' %}
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/pl_PL/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    {% else %}
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    {% endif %}
+    <div class="share-button">
+        <div class="fb-share-button" 
+            data-layout="box_count" 
+            data-action="recommend" 
+            data-show-faces="false" 
+            data-share="true"></div>
+    </div>
+
+    <!-- Google +1. -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'pl'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/platform.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+    <div class="share-button">
+        <div class="g-plusone" data-size="tall"></div>
+    </div>
+
+    <!-- BufferApp -->
+    <div class="share-button"> 
+        <a href="http://bufferapp.com/add" 
+        class="buffer-add-button"  
+        data-count="vertical" ></a>
+    </div>
+    <script type="text/javascript" src="https://d389zggrogs7qo.cloudfront.net/js/button.js"></script>
+
+    <!-- Twitter -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <div class="share-button">
+    <a href="#"
+        style="width: 49px;" 
+        class="twitter-share-button" 
+        data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweet</a>
+    </div>
+
+    <!-- Linkedin -->
+    <script src="//platform.linkedin.com/in.js" type="text/javascript">
+      lang: en_US
+    </script>
+        <div class="share-button">
+        <script type="IN/Share" 
+        data-counter="top"></script>
+    </div>
+
+    {% if LANG == 'pl' %}
+    <!-- Wykop -->
+        <script language="javascript">
+        // wykopywarka wersja standardowa (59x60)
+        var wykop_url=location.href;// Link do strony
+        var wykop_title=encodeURIComponent(document.title); // Tytuł strony (pobierany z <title>)
+        var wykop_desc=encodeURIComponent('CivilHub');
+        var widget_bg='FFFFFF';
+        var widget_type='normal2';
+        var widget_url='https://www.wykop.pl/dataprovider/diggerwidget/?url='+encodeURIComponent(wykop_url)+'&title='+(wykop_title)+'&desc='+(wykop_desc)+'&bg='+(widget_bg)+'&type='+(widget_type);
+        document.write('<div class="share-button"><iframe src="'+widget_url+'" style="border:none;width:56px;height:60px;overflow:hidden;margin:0;padding:0;" frameborder="0" border="0"></iframe></div>');</script>
+    {% else %}
+    <!-- Reddit -->
+        <div class="share-button">
+            <script type="text/javascript">
+              reddit_newwindow='1';
+            </script>
+            <script type="text/javascript" src="//www.redditstatic.com/button/button2.js"></script>
+        </div>
+    {% endif %}
+
+</div>
+

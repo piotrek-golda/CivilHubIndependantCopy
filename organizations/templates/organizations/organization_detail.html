@@ -1,0 +1,49 @@
+{% extends 'organizations/index.html' %}{% load i18n staticfiles actstream_tags civil_tags counters %}
+{% block require_scripts %}<script src="{% static 'places_core' %}/js/{% js_path %}/organization-detail.js"></script>{% endblock %}
+{% block container_main %}<div class="container fake-container-fill">
+  {% block content %}{% visit_counter organization %}<div class="fake-row-fill">
+    <div class="col-sm-3 no-float">
+      <div class="main-content p-reset">
+        <div class="ac-title"><strong>{% trans "Information about the organization" %}</strong></div>
+        <div class="ac-hot-box">
+          <div class="ac-hot-single-box"><strong>{% trans "Organization name" %}:</strong>
+            <ul class="list-unstyled mb0">
+              <li>{{ organization.name }}</li>
+            </ul>
+          </div>
+          {% if organization.krs %}<div class="ac-hot-single-box"><strong>{% trans "KRS" %}:</strong>
+            <ul class="list-unstyled mb0">
+              <li>{{ organization.krs }}</li>
+            </ul>
+          </div>{% endif %}
+          {% if organization.website %}<div class="ac-hot-single-box"><strong>{% trans "Website" %}:</strong>
+            <ul class="list-unstyled mb0">
+              <li><a href="{{ organization.website }}" target="_blank" rel="nofollow">{{ organization.website }}</a></li>
+            </ul>
+          </div>{% endif %}
+        </div>
+      </div>
+      <div class="main-content p-reset">
+        <div class="ac-title"><strong>{% trans "Members" %}</strong></div>
+        <div class="ac-hot-box">
+          <div class="ac-hot-single-box clearfix">
+            <div class="followers-box">
+              {% for member in  organization.users.all %}
+              <div class="follower">
+                <a href="{{ member.profile.get_absolute_url }}" class="custom-tooltip" title="{{ member.get_full_name }}"><img src="{{ member.profile.avatar.url }}" alt="{{ member.get_full_name }}" /></a></div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 no-float">
+    {% actstream organization 'ngo' %}
+    </div>
+    <div class="col-sm-3 no-float">
+      <div class="ac-right-site">
+        <p>{{ organization.description|safe }}</p>
+      </div>
+    </div>
+</div>{% endblock %}
+</div>{% endblock %}

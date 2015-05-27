@@ -1,0 +1,35 @@
+{% load staticfiles i18n civil_tags analytical %}
+
+{% get_current_language as LANG %}
+{% include 'places_core/header.html' %}
+
+{% comment %}A place for extra css and js files.{% endcomment %}
+{% block extra_styles %}{% endblock %}
+{% block extra_scripts %}{% endblock %}
+{% block require_scripts %}
+<script src="{% static 'places_core' %}/js/{% js_path %}/static-default.js"></script>
+{% endblock %}
+
+</head>
+
+{% block body %}
+<body class="body-nopd body-Home">
+{%block navigation %}
+{% include 'staticpages/navigation.html' %}
+{% endblock %}
+
+<div class="wrap">
+{% block content %}
+
+    {% comment %}Here goes the kod of a single static page.{% endcomment %}
+
+{% endblock %}
+</div>
+
+{% block footer %}
+{% include 'places_core/footer.html' %}
+{% endblock %}
+{% analytical_body_bottom %}
+</body>
+{% endblock%}
+</html>

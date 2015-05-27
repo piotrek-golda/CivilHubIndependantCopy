@@ -1,0 +1,97 @@
+{% extends 'places_core/base.html' %}{% load staticfiles i18n civil_tags counters actstream_tags %}
+{% block title %}{{ cuser.get_full_name }} - Civilhub.org {% endblock %}
+{% block description %}<meta name="description" content="{{ cuser.get_full_name }} {% if profile.followed_locations %}{% trans "engages in" %} {% for location in profile.followed_locations %}{{ location }}, {% endfor %}{% else %}{% endif %}" />{% endblock %}
+{% block meta %}<meta property="og:image" content="https://civilhub.org{{ profile.avatar.url }}"/>
+<meta property="og:site_name" content="CivilHub"/>
+<meta name="keywords" content=" {{ cuser.first_name }}, {{ cuser.last_name }}, {{ cuser.get_full_name }}">{% endblock %}
+{% block extra_styles %}<style type="text/css">
+.user-logo {
+  background-image: url({{ profile.background_url }});
+}
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .user-logo {
+    background-image: url({{ profile.retina_background_url }});
+  }
+}
+</style>{% endblock %}
+{% block require_scripts %}{% include 'places_core/google-contacts-modal.html' %}
+<script>window.API_URL = "{% url 'rest:my_actions-list' %}";</script>
+<script>window.USER_ID = "{{ cuser.pk }}";</script>
+<script src="{% static 'places_core' %}/js/{% js_path %}/userspace-profile.js"></script>{% endblock %}
+{% block header %}<div class="user-logo">
+  <div class="container">
+    <div class="user-info">
+      <div class="profile-page-avatar"><img src="{{ profile.avatar.url }}" alt="{{ cuser.get_full_name }}" /></div>
+      <div class="user-fullname">{{ cuser.get_full_name }}</div>
+      {% if user != cuser %}{% follow_button cuser %}{% endif %}
+      {% if profile.gplus_url %}<a href="{{ profile.gplus_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Google+ profile" %}"><span class="fa fa-google">&nbsp;</span></a>{% endif %}
+      {% if profile.fb_url %}<a href="{{ profile.fb_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Facebook profile" %}"><span class="fa fa-facebook">&nbsp;</span></a>{% endif %}
+      {% if profile.twt_url %}<a href="{{ profile.twt_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Twitter profile" %}"><span class="fa fa-twitter">&nbsp;</span></a>{% endif %}
+      {% if profile.linkedin_url %}<a href="{{ profile.linkedin_url }}" target="_blank" rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "LinkedIn profile" %}"><span class="fa fa-linkedin">&nbsp;</span></a>{% endif %}
+      {% if profile.website %}<a href="{{ profile.website }}" target="_blank"  rel="nofollow" class="social-link-button custom-tooltip" title="{% trans "Website" %}"><span class="fa fa-external-link">&nbsp;</span></a>{% endif %}
+      {% if request.user != cuser %}<a href="{% url 'postman_write' cuser.username %}" target="_blank" class="social-link-button custom-tooltip" title="{% trans "Send private message" %}"><span class="fa fa-envelope">&nbsp;</span></a>{% endif %}
+    </div>
+    {% if request.user == cuser %}<div class="group-change-bg-btn"><a class="change-background-btn" href="{% url 'user:background' %}">{% trans "Change background image" %}</a></div>{% endif %}
+  </div>
+</div>
+<nav id="filter-navbar" class="navbar-default mt0" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-location-collapse-menu">
+        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="row collapse navbar-collapse profileClassNav" id="bs-location-collapse-menu">
+      <ul class="nav navbar-nav navbar-nav-userspace">
+        <li><a href="#" class="list-controller userspace active" data-control="content" data-target="all">{% trans "Everything" %}</a></li>
+        <li><a href="#" class="list-controller userspace" data-control="content" data-target="blog.news">{% trans "Blog" %}</a></li>
+        <li><a href="#" class="list-controller userspace" data-control="content" data-target="topics.discussion">{% trans "Discussions" %}</a></li>
+        <li><a href="#" class="list-controller userspace" data-control="content" data-target="ideas.idea">{% trans "Ideas" %}</a></li>
+        <li><a href="#" class="list-controller userspace" data-control="content" data-target="polls.poll">{% trans "Polls" %}</a></li>
+        <li><a href="#" class="list-controller userspace" data-control="content" data-target="gallery.locationgalleryitem">{% trans "Gallery" %}</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <form id="haystack-form" class="navbar-form navbar-right" role="search" method="get" action="">
+          <div class="form-group">
+            <input type="text" name="haystack" id="haystack" placeholder="{% trans "Search" %}..." class="form-control" />
+          </div>
+          <button type="submit" class="search-button"><span class="fa fa-search"></span></button>
+        </form>
+      </ul>
+    </div>
+  </div>
+</nav>{% endblock %}
+
+{% block container_main %}<div class="container fake-container-fill">
+  {% block content %}<div class="fake-row-fill">
+    <div class="col-sm-3 mt25 no-float">
+      <div class="hotbox main-content p-reset" data-param="uid" data-value="{{ cuser.pk }}"><div class="ac-title"><span class="badge badge-btn">0</span>{% trans "Popular entries" %}</div></div>
+    </div>
+    <div class="col-sm-6 mt25 no-float">{% actstream cuser 'actor' %}</div>
+    <div class="col-sm-3 no-float">
+      <div class="ac-right-site">
+        <div class="menu-box">
+          <h3>{%trans "Shortcuts" %}</h3>
+          <ul class="shortcuts">
+            <li><a href="/local-communities/">{% trans "Local Communities" %}</a></li>
+            <li><a href="/project-features/">{% trans "About Projects" %}</a></li>
+            <li><a href="/idea-to-law/">{% trans "Law changes" %}</a></li>
+            <li><a href="/idea-to-project/">{% trans "Idea to Projects" %}</a></li>
+          </ul>
+        </div>
+        <div class="ac-small-box sm-box-invite">
+          <a href="/invite-friends/" class="full-click-box"></a>
+            <div class="text-box">
+              <h3>{% trans "Invite a firend" %}</h3>
+              <p>{% trans "Your friends don’t know about CivilHub yet? Send them an invite!" %}</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>{% endblock %}
+</div>{% endblock %}

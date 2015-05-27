@@ -1,0 +1,17 @@
+{% extends 'projects/index.html' %}{% load staticfiles i18n civil_tags %}
+{% block location_navbar %}<div class="socialforumtopic-list-nav">{% include 'projects/navbar.html' %}</div>{% endblock %}
+{% block content %}
+<div class="main-content">
+  <div class="create-form newFormCreate">
+    <h3>{% trans "Create discussion" %}</h3>
+  </div>
+  <form class="form-horizontal" method="post" action="">{% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-group mb0">
+      <div class="container-fluid text-right">
+        <button type="submit" class="btn btn-primary btn-saveBig">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

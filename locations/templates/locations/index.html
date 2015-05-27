@@ -1,0 +1,83 @@
+{% extends 'places_core/base.html' %}
+{% load staticfiles i18n civil_tags cache %}
+
+{% cache 600 header location.slug %}
+
+{% block geometa %}{% if location.latitude and location.longitude %}
+<meta name="DC.title" content="{{ location }}" />
+<meta name="geo.region" content="{{ location.country_code }}" />
+<meta name="geo.placename" content="{{ location.name }}" />
+<meta name="geo.position" content="{{ location.latitude }};{{ location.longitude }}" />
+<meta name="ICBM" content="{{ location.latitude }}, {{ location.longitude }}" />
+{% endif %}{% endblock %}
+
+{% block header %}
+<style type="text/css">
+.location-logo {
+    background-image: url({{ location.background_url }});
+}
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .location-logo {
+        background-image: url({{ location.retina_background_url }});
+    }
+}
+</style>
+<nav id="location-chain-menu" class="navbar navbar-default" role="navigation">
+<div class="container">
+<div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+
+    <ul class="nav navbar-nav">
+        <li class="first-indicator"><a href="/places/"><div class="maker-globe-point"></div></a></li>
+        {% for parent in location.get_parent_chain %}
+        <li><a href="{{ parent.url }}">{{ parent.name }}</a></li>
+        <li class="breaker">
+            <a href="#" class="sublocation-menu-toggle" data-target="{{ parent.pk }}" data-toggle="dropdown"><span class="custom-tooltip-right" title="{% trans "Sublocations" %}">&gt;</span></a></li>
+        {% endfor %}
+        <li class="active">
+            <a href="{{ location.get_absolute_url }}">{{ location }}</a>
+        </li>
+        {% if location.location_set.count %}
+        <li class="last-element">
+            <a href="#" class="dropdown-toggle sublocation-menu-toggle" data-target="{{ location.pk }}" data-toggle="dropdown"></a>
+        </li>
+        {% endif %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'locations:followers' location.slug %}" id="tour-Followers" class="lfollowers">{% trans "Followers" %}</a></li>
+      <li><a href="{% url 'locations:sublocations' location.slug %}" id="tour-Subspaces" class="lsubspaces">{% trans "Subspaces" %}</a></li>
+    </ul>
+
+</div>
+</div>
+</nav>
+<div class="location-logo">
+    <div class="container">
+        <div class="title-container">
+            <div class="location-name-title" id="tour-location-name"><h1><a href="{{ location.get_absolute_url }}">{{ location }}</a></h1></div>
+            <div class="followers sprite-icon"><span class="ch-icon ch-followers-white"></span>{{ location.users.all|length }}</div>
+
+        {% if user in location.users.all %}
+            <button type="button" class="loc-fllw-btn btn-unfollow-location chFollowers" data-location-id="{{ location.pk }}">{% trans "You are following" %}</button>
+        {% else %}
+            <button type="button" class="loc-fllw-btn btn-follow-location chFollowers" data-location-id="{{ location.pk }}">{% trans "Follow" %}</button>
+        {% endif %}
+
+        </div>
+
+        {% if user.is_superuser or is_moderator %}<div class="group-change-bg-btn"><a class="change-background-btn" href="{% url 'locations:background' location.pk %}">{% trans "Change background image" %}</a>
+        <a class="change-background-btn" href="{% url 'locations:update' location.slug %}">{% trans "Edit this location" %}</a>
+        {% if user.is_superuser %}<a class="change-background-btn" href="{% url 'civmail:followers-message' location.pk %}">{% trans "Send message to followers" %}</a>
+        <a class="change-background-btn" href="{% url 'locations:manage-moderators' location.slug %}">{% trans "Moderators" %}</a>{% endif %}</div>{% endif %}
+
+    </div>
+</div>
+
+{% block navigation_location %}<div class="location-page">{% include 'locations/location-navbar.html' %}</div>{% endblock %}
+
+<input type="hidden" id="current-location-pk" value="{{ location.pk }}" />
+
+{% endblock %}
+
+{% endcache %}

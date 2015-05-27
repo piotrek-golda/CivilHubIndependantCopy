@@ -1,0 +1,136 @@
+.comment {
+  /*margin-bottom: 0px;*/
+  a{ color: #8c8c8c;
+    &:hover{ color: #0083FB; }
+  }
+  p,a{ font-size: 12px; }
+  .comment-total-votes { margin-right: 10px; }
+  .comment-main-col {
+    padding-left: 50px;
+    padding-right: 0px;
+    & > small{ & + a { margin-left: 2px; } }
+    &:hover{
+      .comment-controls{ opacity: 1; }
+    }
+  }
+  .comment-author-name { color: #0087ff; }
+  .comment-date-from-now{ color: #8c8c8c; }
+  .comment-badge{ margin: 0 1px; font-size: 10px; font-weight: 400; padding: 2px 5px;}
+  .comment-controls {
+    opacity: 0;
+    float: right;
+    transition: all .3s
+  }
+  /*.subcomments { margin-top: 0px; }*/
+  /*.comment-content {
+    font-size: 14px;
+    line-height: 20px;
+  }*/
+  /*commentNext{
+      margin-top: 0px;
+  }*/
+}
+
+//new comments in activities
+.ac-comment{ //div in activity
+  .comment-toggle, .show-more{ display: inline-block; margin-bottom: 15px; }
+}
+
+.comment-area{
+  display: none;
+}
+/* Comments */
+
+.commentformarea {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  .avatarCommentsAutor{
+    padding: 0;
+  /*  margin-right: -15px;*/
+    img{
+      width: 40px;
+      height: 40px;
+    }
+  }
+  //ukryte w js sortowanie
+/* #comment-order-controls{
+  margin-top: -20px;
+  padding-bottom: 20px;
+  font-size: 12px;
+ }*/
+/* #user-comment-form{
+  margin-right: -30px;
+ }*/
+  textarea{
+  border-radius: 0;
+  box-shadow: 0 0 0 transparent;
+  -webkit-box-shadow: 0 0 0 transparent;
+  -moz-box-shadow: 0 0 0 transparent;
+  resize: vertical;
+  overflow: hidden;
+  }
+  width: 100%;
+  .current-user-comment-avatar {
+    margin-top: 10px;
+  }
+  /*.btn-submit-comment-main {
+    float: right;
+  }*/
+}
+/* // Comments */
+
+/*@media all and (max-width: 768px) {
+  #comments {
+    .comment {
+      .col-sm-11 { padding-left: 50px; }
+    }
+  }
+}*/
+
+.customEntry-comments{
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 18px;
+  border-bottom: 1px solid #5B5757;
+  margin-bottom: 10px;
+  .custom-comments-toggle{
+    float: right;
+    text-decoration: none;
+  }
+}
+.filters{
+  font-size: 12px;
+  margin-bottom: 20px;
+ }
+
+.postbox{ position: relative;
+  .avatar{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+  }
+  .textarea-wrapper{ margin: 0 0 15px 50px; }
+}
+
+.ngo-badge-group{
+  clear: left;
+  display: block;
+  text-align: center;
+  font-size: 10px;
+}
+.ngo-badge{
+  .badge-green;
+  width: 14px;
+  height: 14px;
+  font-size: 10px;
+  color: #fff;
+  line-height: 13px;
+  .border-radius(50%);
+  display: inline-block;
+  vertical-align: top;
+  display: inline-block;
+  margin: 1px;
+
+}

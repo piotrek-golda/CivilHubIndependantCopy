@@ -1,0 +1,160 @@
+{% extends 'places_core/base.html' %}
+{% load staticfiles activity_tags i18n civil_tags %}
+
+{% block require_scripts %}
+<script>window.API_URL = "/api-userspace/activity/";</script>
+<script>window.USER_ID = "{{ user.pk }}";</script>
+<script src="{% static 'places_core' %}/js/{% js_path %}/userspace-activity.js"></script>
+{% endblock %}
+
+{% block title %}{% ifequal request.user actor %}Your feed{% else %}{{ actor }}{% endifequal %}{% endblock %}
+{% block content_title %}{% ifequal request.user actor %}Your feed{% else %}{{ actor }}{% endifequal %}{% endblock %}
+
+{% block navlinks %}
+<li><a href="{% url actstream_object_feed content_type_id=ctype.pk  object_id=actor.pk %}">RSS</a></li>
+<li><a href="{% url actstream_object_feed_atom content_type_id=ctype.pk  object_id=actor.pk %}">ATOM</a></li>
+{% ifequal request.user actor %}{% else %}
+    <li>
+        <a href="{% url actstream_unfollow content_type_id=ctype.pk  object_id=actor.pk %}" id="unfollow_button" style="display:none">{% trans "UNFOLLOW" %}</a>
+        <a href="{% url actstream_follow content_type_id=ctype.pk  object_id=actor.pk %}" id="follow_button" >{% trans "FOLLOW" %}</a>
+    </li>
+{% endifequal %}
+{% endblock %}
+
+{% block header %} {% endblock %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+{% comment %}<p><b><a href="{% actor_url request.user %}">{% trans "View my actions" %}</a></b></p>{% endcomment %}
+{% endif %}
+
+<div class="activities-page">
+
+    <div class="col-lg-5">
+        <div class="activity-stream">
+            <noscript>
+            {% for action in action_list %}
+                <div class="row action-entry">
+                    
+                    <div class="col-xs-2 entry-avatar-col">
+                        <img src="{{ action.actor.profile.avatar.url }}" alt="{{ action.actor.fullname }}" class="user-avatar" />
+                        {{ action.actor.profile.rank_pts }}
+                    </div>
+                    
+                    <div class="col-xs-10 entry-meta-col">
+                        <div class="entry-header">
+                            <a href="{{ action.actor.get_absolute_url }}">{{ action.actor.get_full_name }}</a>
+                            {{ action.verb }}
+                            {% if action.action_object_content_type %}
+                                &nbsp;{{ action.action_object_content_type }}&nbsp;
+                            {% endif %}
+                            {% if action.action_object %}
+                                {% if action.action_object.get_absolute_url %}
+                                    <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a>
+                                {% else %}
+                                    <a href="{{ action.target_url }}">{{ action.action_object }}</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if action.action_object and action.target %}to{% endif %}
+                            {% if action.target %}
+                                {% if action.target.get_absolute_url %}
+                                    <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+                                {% else %}
+                                    <a href="{{ action.target_url }}">{{ action.target }}</a>
+                                {% endif %}
+                            {% endif %}
+                            {{ action.timestamp|timesince }} {% trans "ago" %}
+                        </div>
+                        <div class="entry-body">
+                            {% if action.action_object_content_type.model == 'poll' %}
+                                {{ action.action_object.question | safe | truncatewords_html:25 }}
+                            {% endif %}
+                            
+                            {% if action.action_object_content_type.model == 'idea' %}
+                                {{ action.action_object.description | safe | truncatewords_html:25 }}
+                            {% endif %}
+                            
+                            {% if action.action_object_content_type.model == 'news' %}
+                                {{ action.action_object.content | safe | truncatewords_html:25 }}
+                            {% endif %}
+                            
+                            {% if action.action_object_content_type.model == 'location' %}
+                                {{ action.action_object.description | safe | truncatewords_html:25 }}
+                            {% endif %}
+                        </div>
+                        <div class="clear">&nbsp;</div>
+                    </div><!-- // .entry-meta-col -->
+                    
+                </div><!-- // .user-action-entry -->
+            {% endfor %}</noscript>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="sidebar">
+            <div class="ambasador-image">
+                <h3>{% trans "Zostań ambasadorem" %}</h3>
+            </div>
+            <div class="sidebar-label">{% trans "News" %}</div>
+            <div class="sidebar-content">
+            
+            </div>
+            
+            <div class="sidebar-label">{% trans "Discussions" %}</div>
+            <div class="sidebar-content">
+            
+            </div>
+            
+            <div class="sidebar-label">{% trans "Ideas" %}</div>
+            <div class="sidebar-content">
+            
+            </div>
+            
+            <div class="sidebar-label">{% trans "Polls" %}</div>
+            <div class="sidebar-content">
+            
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3">
+        <div class="sidebar">
+            <div class="sidebar-label">{% trans "About me" %}</div>
+            <div class="sidebar-content">
+                {{ actor.profile.description|striptags }}
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script type="text/template" id="action-template">
+        <div class="col-md-2 entry-avatar-col">
+            <img src="<%= actor.avatar %>" alt="<%= actor.fullname %>" class="user-avatar" />
+            <%= actor.rank_pts %>
+        </div>
+        
+        <div class="col-md-10 entry-meta-col">
+            <div class="entry-header">
+                <a href="<%= actor.user_link %>"><%= actor.fullname %></a>
+                <%= verb %>
+                <% if (!_.isEmpty(object_ct)) { %>
+                    <%= object_ct %>
+                    <% if (_.isEmpty(target_ct)) { %>
+                        <a href="<%= object.url %>"><%= object.name %></a>
+                    <% } else { %>
+                        <a href="<%= object.url %>"><%= object.name %></a>
+                        {% trans "to" %} <a href="<%= target.url %>"><%= target.name %></a>
+                    <% } %>
+                <% } else if (!_.isEmpty(target_ct)) { %>
+                    <a href="<%= target.url %>"><%= target.name %></a>
+                <% } %>
+                <%= timestamp %> {% trans "ago" %}
+            </div>
+            <div class="entry-body"><%= description %></div>
+            <div class="clear">&nbsp;</div>
+            <div class="entry-footer"></div>
+        </div><!-- // .entry-meta-col -->
+    </script>
+
+{% endblock %}

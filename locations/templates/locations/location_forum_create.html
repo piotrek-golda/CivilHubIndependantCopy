@@ -1,0 +1,40 @@
+{% extends 'locations/index.html' %}
+{% load staticfiles i18n civil_tags %}
+
+{% block require_scripts %}
+{% include 'places_core/script-templates/content-edit.html' %}
+<script src="{% static 'places_core' %}/js/{% js_path %}/discussion-create.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-sm-9 main-content contentPX">
+        <div class="create-form newFormCreate">
+            <h3>{% trans "Create discussion in" %} {{ location }}</h3>
+            <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" id="content-create-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p style="text-align:center;">{% trans "If this discussion is about a specific location, you can mark it on the map" %}</p>
+                <div class="form-group">
+                    <div class="control-label col-sm-2">&nbsp;</div>
+                    <div class="col-sm-10"><div class="mapinput"></div></div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-sm-2">&nbsp;</div>
+                    <div class="col-sm-10 text-right">
+                        <button type="submit" class="btn btn-primary save-btn btn-saveBig">{% trans "Save" %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    {% include 'locations/category-form.html' %}
+    
+    {% include 'gallery/media-uploader.html' %}
+
+    <div class="col-sm-3 boxPX">
+        {% include 'locations/sidebar.html' %}
+    </div>
+
+{% endblock %}
